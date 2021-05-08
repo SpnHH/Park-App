@@ -1,5 +1,6 @@
 package com.example.parkapp.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -17,7 +18,9 @@ import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.parkapp.R;
+import com.example.parkapp.util.JsonRequestHandle;
 import com.example.parkapp.util.SignInHandle;
+import com.example.parkapp.util.UrlConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,10 +29,12 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity{
     public TextView textView ;
     public RequestQueue queue;
-    public  JSONArray jsonArray;
+    public JSONArray jsonArray;
     public SignInHandle signInHandle;
     public EditText username;
     public EditText pass;
+    public JsonRequestHandle jsonRequestHandle;
+    UrlConfig urlConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,37 +47,27 @@ public class MainActivity extends AppCompatActivity{
         pass = (EditText) findViewById(R.id.txtPass);
 
         queue = Volley.newRequestQueue(this);
-        String url = "https://5611301eb55e.ngrok.io/api/v1/user" ;
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+        urlConfig = new UrlConfig();
+        jsonRequestHandle = new JsonRequestHandle(this);
+        textView.setText(jsonRequestHandle.request(urlConfig.getUserUrl()));
 
-            @Override
-            public void onResponse(JSONArray response) {
-                jsonArray = response;
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // TODO: Handle error
-                textView.setText("error: " + error.toString());
-
-            }
-        });
-
-        queue.add(jsonArrayRequest);
     }
 
     public void clickSignIn(View view) throws JSONException {
+        jsonArray = jsonRequestHandle.getJsonArray();
         if(signInHandle.SignIn(jsonArray, username.getText().toString(),pass.getText().toString())){
-            textView.setText("success ");
+             Intent i = new Intent(this, UserMainActivity.class);
+             startActivity(i);
         }else{
-            textView.setText("failed ");
+            textView.setText("Invalid username or password");
         }
 
     }
 
 
     public void clickRegister(View view) {
+        Intent i = new Intent(this, RegisterActivity.class);
+        startActivity(i);
     }
 }
