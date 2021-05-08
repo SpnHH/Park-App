@@ -8,23 +8,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.parkapp.R;
-import com.example.parkapp.util.JsonRequestHandle;
+import com.example.parkapp.util.JsonHandler;
 import com.example.parkapp.util.SignInHandle;
 import com.example.parkapp.util.UrlConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity{
     public TextView textView ;
@@ -33,7 +25,7 @@ public class MainActivity extends AppCompatActivity{
     public SignInHandle signInHandle;
     public EditText username;
     public EditText pass;
-    public JsonRequestHandle jsonRequestHandle;
+    public JsonHandler jsonRequestHandle;
     UrlConfig urlConfig;
 
     @Override
@@ -49,7 +41,7 @@ public class MainActivity extends AppCompatActivity{
         queue = Volley.newRequestQueue(this);
 
         urlConfig = new UrlConfig();
-        jsonRequestHandle = new JsonRequestHandle(this);
+        jsonRequestHandle = new JsonHandler(this);
         textView.setText(jsonRequestHandle.request(urlConfig.getUserUrl()));
 
     }

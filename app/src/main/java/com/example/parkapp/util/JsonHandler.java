@@ -11,13 +11,13 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 
-public class JsonRequestHandle {
+public class JsonHandler {
     public RequestQueue queue;
     public  JSONArray jsonArray;
     String err = null;
     String url = null;
 
-    public JsonRequestHandle(Context ctx) {
+    public JsonHandler(Context ctx) {
         queue = Volley.newRequestQueue(ctx);
         this.jsonArray = new JSONArray();
         this.url = null;

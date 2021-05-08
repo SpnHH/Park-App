@@ -6,10 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.parkapp.R;
-import com.example.parkapp.util.JsonRequestHandle;
+import com.example.parkapp.util.JsonHandler;
 import com.example.parkapp.util.UrlConfig;
 
 import org.json.JSONArray;
@@ -19,7 +18,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText username;
     EditText password;
     EditText confirmPassword;
-    JsonRequestHandle jsonRequestHandle;
+    JsonHandler jsonRequestHandle;
     JSONArray currentDB;
     UrlConfig urlConfig;
     TextView textView;
@@ -32,7 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
         password = (EditText)findViewById(R.id.registerPassword);
         confirmPassword = (EditText)findViewById(R.id.registerConfirmPassword);
         urlConfig = new UrlConfig();
-        jsonRequestHandle = new JsonRequestHandle(this);
+        jsonRequestHandle = new JsonHandler(this);
         jsonRequestHandle.request(urlConfig.getUserUrl());
         currentDB = new JSONArray();
         textView = (TextView) findViewById(R.id.registerResult);
@@ -42,7 +41,15 @@ public class RegisterActivity extends AppCompatActivity {
     public void RegisterToDB(View view) throws JSONException {
         if(checkInDB(username.getText().toString(),"username")){
             textView.setText("Username is already taken");
+
+        }else{
+            if(password.getText().toString().equals(confirmPassword.getText().toString())){
+
+            }else{
+                textView.setText("Passwords do not match");
+            }
         }
+
     }
 
     //if str is find in BD return true
