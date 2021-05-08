@@ -1,4 +1,4 @@
-package com.example.parkapp;
+package com.example.parkapp.Activities;
 
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +16,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.parkapp.R;
 import com.example.parkapp.util.SignInHandle;
 
 import org.json.JSONArray;
