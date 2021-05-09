@@ -35,7 +35,7 @@
         android:id="@+id/txtCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="Hello"
         app:layout_constraintBottom_toTopOf="@+id/btnGenerate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

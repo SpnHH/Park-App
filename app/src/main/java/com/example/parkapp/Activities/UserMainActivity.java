@@ -19,7 +19,7 @@ public class UserMainActivity extends AppCompatActivity {
 
     public CurrentUser currentUser;
     public TextView textView;
-    public TextView txtCode;
+    public TextView textView1;
     public Button btnGenerate;
     public JsonHandler jsonHandler;
     public UrlConfig urlConfig;
@@ -30,9 +30,9 @@ public class UserMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main);
         textView = (TextView) findViewById(R.id.usetTextView);
-        txtCode = (TextView) findViewById(R.id.txtPass);
+        textView1 = (TextView) findViewById(R.id.txtCode);
         btnGenerate = (Button) findViewById(R.id.btnGenerate);
-        jsonHandler = new JsonHandler(this,txtCode);
+        jsonHandler = new JsonHandler(this,textView1);
         currentUser = new CurrentUser();
         urlConfig = new UrlConfig();
         textView.setText("Hello " + currentUser.getUsername());
