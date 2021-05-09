@@ -6,9 +6,9 @@ public class UrlConfig {
     private String codeUrl;
 
     public UrlConfig() {
-        this.serverUrl = "https://3e456f32a1ad.ngrok.io";
+        this.serverUrl = "https://946610b58b00.ngrok.io";
         this.userUrl = "/api/v1/user";
-        this.codeUrl= "/api/v1/code";
+        this.codeUrl= "/api/v1/code/";
     }
 
     public String getUserUrl() {

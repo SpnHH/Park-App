@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.example.parkapp.R;
+import com.example.parkapp.util.CurrentUser;
 import com.example.parkapp.util.JsonHandler;
 import com.example.parkapp.util.SignInHandle;
 import com.example.parkapp.util.UrlConfig;
@@ -26,7 +27,8 @@ public class MainActivity extends AppCompatActivity{
     public EditText username;
     public EditText pass;
     public JsonHandler jsonRequestHandle;
-    UrlConfig urlConfig;
+    public UrlConfig urlConfig;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,11 @@ public class MainActivity extends AppCompatActivity{
 
         urlConfig = new UrlConfig();
         jsonRequestHandle = new JsonHandler(this);
-        textView.setText(jsonRequestHandle.request(urlConfig.getUserUrl()));
+        try {
+            textView.setText(jsonRequestHandle.request(urlConfig.getUserUrl()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -62,4 +68,6 @@ public class MainActivity extends AppCompatActivity{
         Intent i = new Intent(this, RegisterActivity.class);
         startActivity(i);
     }
+
+
 }

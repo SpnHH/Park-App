@@ -2,6 +2,7 @@ package com.example.parkapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +14,9 @@ import com.example.parkapp.util.UrlConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     EditText username;
@@ -22,6 +26,7 @@ public class RegisterActivity extends AppCompatActivity {
     JSONArray currentDB;
     UrlConfig urlConfig;
     TextView textView;
+    JSONObject jsonObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +37,15 @@ public class RegisterActivity extends AppCompatActivity {
         confirmPassword = (EditText)findViewById(R.id.registerConfirmPassword);
         urlConfig = new UrlConfig();
         jsonRequestHandle = new JsonHandler(this);
-        jsonRequestHandle.request(urlConfig.getUserUrl());
+        try {
+            jsonRequestHandle.request(urlConfig.getUserUrl());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         currentDB = new JSONArray();
         textView = (TextView) findViewById(R.id.registerResult);
         textView.setText("");
+        jsonObject = new JSONObject();
     }
 
     public void RegisterToDB(View view) throws JSONException {
@@ -44,7 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         }else{
             if(password.getText().toString().equals(confirmPassword.getText().toString())){
-
+                jsonRequestHandle.requestPost(urlConfig.getUserUrl(),makeJson());
+                Intent i = new Intent(this,MainActivity.class);
+                startActivity(i);
             }else{
                 textView.setText("Passwords do not match");
             }
@@ -64,4 +76,18 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return false;
     }
-}
+
+    private JSONObject makeJson(){
+        try {
+            jsonObject.put("id","");
+            jsonObject.put("username", username.getText().toString());
+            jsonObject.put("pass",password.getText().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+            return jsonObject;
+        }
+
+
+
+    }
