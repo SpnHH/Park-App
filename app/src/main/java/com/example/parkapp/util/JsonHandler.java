@@ -1,7 +1,6 @@
 package com.example.parkapp.util;
 
 import android.content.Context;
-import android.content.SearchRecentSuggestionsProvider;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -20,7 +19,7 @@ import org.json.JSONObject;
 public class JsonHandler {
     public RequestQueue queue;
     public  JSONArray jsonArray;
-    public  JSONObject jsonObject;
+    public volatile JSONObject jsonObject;
     String err = null;
     String url = null;
     CurrentUser currentUser;
@@ -89,14 +88,15 @@ public class JsonHandler {
     }
 
 
-    public JSONObject requestJSONObject(String url) throws JSONException {
+    public StringRequest requestJSONObject(String url) throws JSONException {
+
         StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 err = response;
                 try {
                     jsonObject = new JSONObject(response);
-                    currentUser.setCode(jsonObject.getString("password").toString());
+                    currentUser.setCode(jsonObject.getString("pass").toString());
                     textView.setText(currentUser.getCode());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -109,16 +109,61 @@ public class JsonHandler {
             }
         }) ;
 
-
         queue.add(jsonObjectRequest);
-
         //currentUser.setCode(jsonObject.getString("password").toString());
-        return jsonObject;
+//        textView.setText(currentUser.getCode());
+        currentUser.setCode(jsonObject.getString("pass").toString());
+        return jsonObjectRequest;
     }
 
+    public StringRequest requestDelete(String url){
+        StringRequest deleteRequest = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                err = response;
+//                textView.setText("Code expired");
 
+            }
+        }, new Response.ErrorListener(){
+            public void onErrorResponse(VolleyError error) {
+                err=error.toString();
+            }
+        });
+        queue.add(deleteRequest);
+        return deleteRequest;
+    }
 
+    public void addQueue(StringRequest request){
+        queue.add(request);
+    }
 
+    public boolean checkIfCodeWasUsed(String url) throws JSONException {
 
+        StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                err = response;
+                try {
+                    jsonObject = new JSONObject(response);
+                    currentUser.setCode(jsonObject.getString("pass").toString());
+                    //textView.setText(currentUser.getCode());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    err = "error";
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+               // err = "error";
+            }
+        }) ;
 
+        queue.add(jsonObjectRequest);
+        if(err.toString() == "error"){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
