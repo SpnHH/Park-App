@@ -16,7 +16,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.233" />
+        app:layout_constraintVertical_bias="0.132" />
 
     <Button
         android:id="@+id/btnGenerate"
@@ -62,4 +62,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.071" />
+
+    <TextView
+        android:id="@+id/spotsTxtView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="174dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="180dp"
+        android:layout_marginBottom="123dp"
+        android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/txtCode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usetTextView" />
+
+    <Button
+        android:id="@+id/btnCheckSpots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="CheckSpots"
+        android:text="Check Parking Spots Status"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spotsTxtView"
+        app:layout_constraintVertical_bias="0.069" />
 </androidx.constraintlayout.widget.ConstraintLayout>

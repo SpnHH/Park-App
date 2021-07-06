@@ -4,11 +4,13 @@ public class UrlConfig {
     private String serverUrl;
     private String userUrl;
     private String codeUrl;
+    private String spotUrl;
 
     public UrlConfig() {
-        this.serverUrl = "https://1409e1a49708.ngrok.io";
+        this.serverUrl = "https://1586ecf49099.ngrok.io";
         this.userUrl = "/api/v1/user";
         this.codeUrl= "/api/v1/code/";
+        this.spotUrl= "/api/v1/spot/";
     }
 
     public String getUserUrl() {
@@ -17,6 +19,10 @@ public class UrlConfig {
 
     public String getCodeUrl() {
         return serverUrl + codeUrl;
+    }
+
+    public String getSpotUrl() {
+        return serverUrl + spotUrl;
     }
 
 

@@ -21,7 +21,6 @@ public class JsonHandler {
     public  JSONArray jsonArray;
     public volatile JSONObject jsonObject;
     String err = null;
-    String url = null;
     CurrentUser currentUser;
     TextView textView;
 
@@ -29,15 +28,14 @@ public class JsonHandler {
         queue = Volley.newRequestQueue(ctx);
         this.jsonArray = new JSONArray();
         jsonObject = new JSONObject();
-        this.url = null;
         err = null;
         currentUser = new CurrentUser();
     }
     public JsonHandler(Context ctx, TextView textView) {
         queue = Volley.newRequestQueue(ctx);
+
         this.jsonArray = new JSONArray();
         jsonObject = new JSONObject();
-        this.url = null;
         err = null;
         currentUser = new CurrentUser();
         this.textView = textView;
@@ -49,7 +47,6 @@ public class JsonHandler {
     }
 
     public String request(String url) throws JSONException {
-        //String url = "https://3e456f32a1ad.ngrok.io/api/v1/user";
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
@@ -71,6 +68,7 @@ public class JsonHandler {
     }
 
     String resultPost;
+
     public String requestPost(String url, JSONObject jsonToPost){
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, jsonToPost, new Response.Listener<JSONObject>() {
             @Override
@@ -110,8 +108,6 @@ public class JsonHandler {
         }) ;
 
         queue.add(jsonObjectRequest);
-        //currentUser.setCode(jsonObject.getString("password").toString());
-//        textView.setText(currentUser.getCode());
         currentUser.setCode(jsonObject.getString("pass").toString());
         return jsonObjectRequest;
     }
@@ -121,7 +117,6 @@ public class JsonHandler {
             @Override
             public void onResponse(String response) {
                 err = response;
-//                textView.setText("Code expired");
 
             }
         }, new Response.ErrorListener(){
@@ -137,7 +132,8 @@ public class JsonHandler {
         queue.add(request);
     }
 
-    public boolean checkIfCodeWasUsed(String url) throws JSONException {
+    int cnt = 0;
+    public boolean checkIfCodeWasUsed(String url)  {
 
         StringRequest jsonObjectRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -145,7 +141,7 @@ public class JsonHandler {
                 err = response;
                 try {
                     jsonObject = new JSONObject(response);
-                    currentUser.setCode(jsonObject.getString("pass").toString());
+//                    currentUser.setCode(jsonObject.getString("pass").toString());
                     //textView.setText(currentUser.getCode());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -155,7 +151,7 @@ public class JsonHandler {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-               // err = "error";
+                err = "error";
             }
         }) ;
 
@@ -165,5 +161,31 @@ public class JsonHandler {
         }else{
             return false;
         }
+    }
+
+    public JSONArray requestJsonArray(String url, TextView textView) throws JSONException {
+        //String url = "https://3e456f32a1ad.ngrok.io/api/v1/user";
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+
+            @Override
+            public void onResponse(JSONArray response) {
+                jsonArray = response;
+                textView.setText("Available spots: " +jsonArray.length());
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO: Handle error
+                err = error.toString();
+            }
+        });
+
+        queue.add(jsonArrayRequest);
+        return jsonArray;
+    }
+    public void emptyQueue(){
+
     }
 }

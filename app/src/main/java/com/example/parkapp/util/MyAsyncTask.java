@@ -19,7 +19,9 @@ public class MyAsyncTask extends AsyncTask<Void, Void, Void>
      TextView txtView;
      MyTimer myTimer;
      CountDownTimer countDownTimer;
+     boolean isDone;
 
+    int cnt = 0;
     public MyAsyncTask(JsonHandler jsonHandler, String url, JSONObject jsonObject, TextView timerTxtView, TextView txtView) {
         this.jsonHandler = jsonHandler;
         this.url = url;
@@ -27,14 +29,22 @@ public class MyAsyncTask extends AsyncTask<Void, Void, Void>
         this.timerTxtView = timerTxtView;
         this.txtView = txtView;
         //myTimer = new MyTimer(timerTxtView,jsonHandler,url,CodeTxtView);
+        isDone = false;
         countDownTimer = new CountDownTimer(60*15*1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 long millis = millisUntilFinished;
                 //Convert milliseconds into hour,minute and seconds
-                String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis), TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
-                timerTxtView.setText( hms);
-                checkDB();
+                if(isDone == false) {
+                    String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis), TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+                    timerTxtView.setText(hms);
+                }
+                if (cnt == 30){
+                    //checkDB();
+                    onFinish();
+                    cnt = 0;
+                }
+                cnt++;
                 //isDone = false;
             }
 
@@ -42,7 +52,7 @@ public class MyAsyncTask extends AsyncTask<Void, Void, Void>
                 timerTxtView.setText("done!");
                 jsonHandler.requestDelete(url);
                 txtView.setText("Code expired");
-                //isDone = true;
+                isDone = true;
 //                jsonHandler.addQueue(jsonHandler.requestDelete(url));
             }
         };
@@ -57,12 +67,12 @@ public class MyAsyncTask extends AsyncTask<Void, Void, Void>
             jsonHandler.requestJSONObject(url);
             Thread.sleep(200);
 
-            Thread.sleep(200);
+
         } catch (InterruptedException | JSONException e) {
             e.printStackTrace();
         }
-        countDownTimer.start();
 
+        countDownTimer.start();
         return null;
     }
     @Override
@@ -70,18 +80,17 @@ public class MyAsyncTask extends AsyncTask<Void, Void, Void>
             cancel(true);
     }
 
-    public void checkDB(){
-        try {
+
+    public void checkDB()  {
+
             if(jsonHandler.checkIfCodeWasUsed(url)){
                 countDownTimer.cancel();
                 timerTxtView.setText("done!");
                 jsonHandler.requestDelete(url);
                 txtView.setText("Code was already used");
+
             }
-    } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+            }
 
 }
 
